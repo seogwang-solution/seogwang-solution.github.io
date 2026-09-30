@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tile Pioneer 친구 대결</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 16px; text-align: center; color: #1c2a5e; background: #fff8ec; }
+  .code { font-size: 44px; letter-spacing: 8px; margin: 12px 0; }
+  a.btn { display: block; margin: 14px 0; padding: 16px; border-radius: 16px; background: #3e8bff; color: #fff; text-decoration: none; font-size: 18px; }
+  a.alt { background: #4caf50; }
+  p { line-height: 1.6; }
+</style>
+</head>
+<body>
+<h1>⚔️ Tile Pioneer 친구 대결</h1>
+<p id="msg">친구가 대결을 신청했어요!</p>
+<div class="code" id="code"></div>
+<a class="btn" id="open" href="#">앱에서 대결하기</a>
+<a class="btn alt" id="store" href="#">앱 설치하기 (Google Play)</a>
+<p>앱이 열리지 않으면 앱에서 <b>대결 → 친구 대결 → 코드 입력</b>에 위 코드를 입력하세요.</p>
+<p style="font-size:13px;color:#8a6a4a">Friend duel: open the app, then Duel → Friend duel → enter the code above.</p>
+<script>
+  // 게시 주소: https://<아이디>.github.io/duel.html?c=123456  (release_config.json 의 DUEL_LINK_BASE)
+  const PKG = 'com.seogwangsolution.tilepioneer';
+  const store = 'https://play.google.com/store/apps/details?id=' + PKG;
+  const code = (new URLSearchParams(location.search).get('c') || '').replace(/[^0-9]/g, '').slice(0, 6);
+  document.getElementById('code').textContent = code || '------';
+  document.getElementById('store').href = store;
+  const intent = 'intent://duel/' + code + '#Intent;scheme=tilepioneer;package=' + PKG +
+    ';S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+  const open = document.getElementById('open');
+  open.href = /android/i.test(navigator.userAgent) ? intent : store;
+  if (code.length === 6 && /android/i.test(navigator.userAgent)) location.href = intent;
+</script>
+</body>
+</html>
